@@ -11,7 +11,9 @@ docker: docker-build Dockerfile
 docker-etcd: Dockerfile-etcd
 	docker build -f Dockerfile-etcd -t lanrat/ct-etcd .
 
-populate-etcd:
+etcd-populate:
+	# this will likely error, that is fine!
+	echo " ===> IT IS OK IF THIS ERRORS!!! <=== "
 	docker run --rm -it --name pop-etcd --network container:ct_etcd_1 -v $(pwd)/keys:/keys/ lanrat/ct prepare_etcd.sh localhost 4001 /keys/privkey.pem
 
 reset:
