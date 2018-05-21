@@ -76,9 +76,21 @@ services:
         command: ct-mirror --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --target_public_key=/data/keys/pubkey.pem --target_log_uri="http://triton.vorsk.net:6962/"
 
 
+    mirror_remote:
+        image: lanrat/ct
+        volumes:
+            - mirror2:/data
+        environment:
+            - TZ=America/Los_Angeles
+        ports:
+            - 6965:6962
+        command: ct-mirror --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --target_public_key=/usr/local/etc/keys/digicert_ct1.pem --target_log_uri="https://ct1.digicert-ct.com/log"
+
+
 volumes:
     server: {}
     server1: {}
     server2: {}
     mirror: {}
+    mirror2: {}
     etcd_data: {}
