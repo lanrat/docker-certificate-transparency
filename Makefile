@@ -12,7 +12,6 @@ docker-etcd: Dockerfile-etcd
 	docker build -f Dockerfile-etcd -t lanrat/ct-etcd .
 
 populate-etcd:
-	#docker run --rm -it --name pop-etcd --network ct_default -v $(pwd)/keys:/mnt/ct/keys/ lanrat/ct prepare_etcd.sh etcd 4001 keys/privkey.pem
 	docker run --rm -it --name pop-etcd --network container:ct_etcd_1 -v $(pwd)/keys:/keys/ lanrat/ct prepare_etcd.sh localhost 4001 /keys/privkey.pem
 
 reset:
