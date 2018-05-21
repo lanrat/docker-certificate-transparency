@@ -10,7 +10,8 @@ services:
             - TZ=America/Los_Angeles
         ports:
             - 6962:6962
-        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10 --etcd_servers=etcd:4001
+        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10
+        #command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10 --etcd_servers=etcd:4001
 
     etcd:
         image: lanrat/ct-etcd
@@ -21,6 +22,19 @@ services:
             - TZ=America/Los_Angeles
 
 
+    mirror:
+        image: lanrat/ct
+        volumes:
+            - mirror1:/data
+            - ./keys:/data/keys:ro
+        environment:
+            - TZ=America/Los_Angeles
+        ports:
+            - 6964:6962
+        command: ct-mirror --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --target_public_key=/data/keys/pubkey.pem --target_log_uri="http://triton.vorsk.net:6962/"
+
+
 volumes:
     server1: {}
+    mirror1: {}
     etcd_data: {}
