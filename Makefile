@@ -1,4 +1,4 @@
-.PHONY: docker-build docker-mirror docker docker-etcd reset
+.PHONY: docker-build docker docker-etcd reset etcd-populate
 
 default: docker
 
