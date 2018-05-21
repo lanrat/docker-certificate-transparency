@@ -12,7 +12,22 @@ services:
             - 6962:6962
         command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10
 
+
     server:
+        image: lanrat/ct
+        volumes:
+            - server:/data
+            - ./keys:/data/keys:ro
+        environment:
+            - TZ=America/Los_Angeles
+        ports:
+            - 6962:6962
+        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10 --etcd_servers=etcd:4001
+        depends_on:
+            - etcd
+
+
+    server1:
         image: lanrat/ct
         volumes:
             - server1:/data
@@ -21,7 +36,21 @@ services:
             - TZ=America/Los_Angeles
         ports:
             - 6962:6962
-        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10 --etcd_servers=etcd:4001
+        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10 --etcd_servers=etcd:4001
+        depends_on:
+            - etcd
+
+
+    server2:
+        image: lanrat/ct
+        volumes:
+            - server2:/data
+            - ./keys:/data/keys:ro
+        environment:
+            - TZ=America/Los_Angeles
+        ports:
+            - 6963:6962
+        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10 --etcd_servers=etcd:4001
         depends_on:
             - etcd
 
@@ -38,7 +67,7 @@ services:
     mirror:
         image: lanrat/ct
         volumes:
-            - mirror1:/data
+            - mirror:/data
             - ./keys:/data/keys:ro
         environment:
             - TZ=America/Los_Angeles
@@ -48,6 +77,8 @@ services:
 
 
 volumes:
+    server: {}
     server1: {}
-    mirror1: {}
+    server2: {}
+    mirror: {}
     etcd_data: {}
