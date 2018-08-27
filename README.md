@@ -5,6 +5,8 @@ This repository contains Docker images and docker-compose configurations to run 
 
 The provided certificate-transparency documentation is written assuming the user is using Google's GCP cloud. This repository aims to provide generic docker instructions that will run on any cloud environment.
 
+Pre-built docker images can be downloaded here: https://hub.docker.com/r/lanrat/ct/
+
 
 ## Building Docker Images
 
