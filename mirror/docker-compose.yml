@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+    mirror:
+        image: lanrat/ct
+        volumes:
+            - mirror:/data
+            - ./keys:/data/keys:ro
+        ports:
+            - 6962:6962
+        command: ct-mirror --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --etcd_servers=etcd:4001 --target_public_key=/usr/local/etc/keys/digicert_ct1.pem --target_log_uri="https://ct1.digicert-ct.com/log"
+        depends_on:
+            - etcd
+
+    etcd:
+        image: lanrat/ct-etcd
+        volumes:
+            - etcd_data:/opt/etcd/data
+        hostname: etcd
+
+
+volumes:
+    mirror: {}
+    etcd_data: {}

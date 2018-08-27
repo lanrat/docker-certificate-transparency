@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+    server:
+        image: lanrat/ct
+        volumes:
+            - server:/data
+            - ./keys:/data/keys:ro
+        ports:
+            - 6962:6962
+        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10 --etcd_servers=etcd:4001
+        depends_on:
+            - etcd
+
+    etcd:
+        image: lanrat/ct-etcd
+        volumes:
+            - etcd_data:/opt/etcd/data
+        hostname: etcd
+
+
+volumes:
+    server: {}
+    etcd_data: {}

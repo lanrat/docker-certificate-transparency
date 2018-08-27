@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+    server_standalone:
+        image: lanrat/ct
+        volumes:
+            - server:/data
+            - ./keys:/data/keys:ro
+        ports:
+            - 6962:6962
+        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --i_know_stand_alone_mode_can_lose_data --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10
+
+
+volumes:
+    server: {}

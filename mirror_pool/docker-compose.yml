@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+    mirror1:
+        image: lanrat/ct
+        volumes:
+            - mirror1:/data
+            - ./keys:/data/keys:ro
+        ports:
+            - 6962:6962
+        command: ct-mirror --leveldb_db=/data/leveldb/ --colorlogtostderr --logtostderr --etcd_servers=etcd:4001 --target_public_key=/usr/local/etc/keys/digicert_ct1.pem --target_log_uri="https://ct1.digicert-ct.com/log"
+        depends_on:
+            - etcd
+
+    mirror2:
+        image: lanrat/ct
+        volumes:
+            - mirror2:/data
+            - ./keys:/data/keys:ro
+        ports:
+            - 6963:6962
+        command: ct-mirror --leveldb_db=/data/leveldb/ --colorlogtostderr --logtostderr --etcd_servers=etcd:4001 --target_public_key=/usr/local/etc/keys/digicert_ct1.pem --target_log_uri="https://ct1.digicert-ct.com/log"
+        depends_on:
+            - etcd
+        
+    etcd:
+        image: lanrat/ct-etcd
+        volumes:
+            - etcd_data:/opt/etcd/data
+        hostname: etcd
+
+
+volumes:
+    mirror1: {}
+    mirror2: {}
+    etcd_data: {}

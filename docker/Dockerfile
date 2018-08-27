@@ -6,8 +6,8 @@ RUN apt-get update && \
     apt-get install -qqy \
         ca-certificates curl
 
-COPY --from=lanrat/ct:build /ct/bin/* /usr/local/bin/
-COPY --from=lanrat/ct:build /ct/certificate-transparency/cloud/keys /usr/local/etc/keys
+COPY --from=lanrat/ct-build /ct/bin/* /usr/local/bin/
+COPY --from=lanrat/ct-build /ct/certificate-transparency/cloud/keys /usr/local/etc/keys
 
 VOLUME /data
 WORKDIR /data

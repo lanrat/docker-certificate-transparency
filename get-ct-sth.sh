@@ -6,5 +6,5 @@ if [ $# -ne 1 ]; then
     exit 1
 fi
 
-curl -v $1/ct/v1/get-sth
+curl $1/ct/v1/get-sth
 echo ""

@@ -2,14 +2,14 @@
 
 default: docker
 
-docker-build: Dockerfile-build
-	docker build -f Dockerfile-build -t lanrat/ct:build .
+docker-build: build/Dockerfile
+	docker build -f build/Dockerfile -t lanrat/ct-build .
 
 docker: docker-build Dockerfile
 	docker build -f Dockerfile -t lanrat/ct .
 
-docker-etcd: Dockerfile-etcd
-	docker build -f Dockerfile-etcd -t lanrat/ct-etcd .
+docker-etcd: etcd/Dockerfile
+	docker build -f etcd/Dockerfile -t lanrat/ct-etcd .
 
 etcd-populate:
 	# this will likely error, that is fine!

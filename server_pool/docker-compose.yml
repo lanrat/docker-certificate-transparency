@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+    server1:
+        image: lanrat/ct
+        volumes:
+            - server1:/data
+            - ./keys:/data/keys:ro
+        ports:
+            - 6962:6962
+        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10 --etcd_servers=etcd:4001
+        depends_on:
+            - etcd
+
+    server2:
+        image: lanrat/ct
+        volumes:
+            - server2:/data
+            - ./keys:/data/keys:ro
+        ports:
+            - 6963:6962
+        command: ct-server --key=/data/keys/privkey.pem --trusted_cert_file=/data/keys/ca-roots.pem --leveldb_db=/data/leveldb/ --colorlogtostderr --logtostderr --guard_window_seconds=5 --tree_signing_frequency_seconds=10 --etcd_servers=etcd:4001
+        depends_on:
+            - etcd
+
+    etcd:
+        image: lanrat/ct-etcd
+        volumes:
+            - etcd_data:/opt/etcd/data
+        hostname: etcd
+
+
+volumes:
+    server1: {}
+    server2: {}
+    etcd_data: {}
